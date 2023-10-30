@@ -1,0 +1,44 @@
+import numpy as np
+import pydicom as pdc
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+# Abrir la imagen
+def abrir_imagen(num_imagen):
+    return pdc.dcmread(f"./im{num_imagen}.dcm")
+
+imagen = abrir_imagen(8)
+
+# Metadatos de la imagen
+print(imagen)
+
+# Metadatos importantes
+print("Bits por pixel:", imagen.BitsStored)
+print("Modalidad:", imagen.Modality)
+print("Descripción del estudio:",imagen.StudyDescription)
+print("Numero de filas:", imagen.Rows)
+print("Numero de columnas:", imagen.Columns)
+
+# Guardar la imagen en una matriz de datos indicando los bits por pixel
+def imagen_bits(imagen, bpp = 12):
+    if bpp == 12:
+        sol = np.array(imagen.pixel_array)
+    elif bpp == 8:
+        sol = (np.array(imagen.pixel_array) * (255/4095)).astype(np.uint8)
+    return sol, bpp
+
+# Guarda una imagen con 8 bpp y con un nombre
+def guardar_8b(imagen, titulo):
+    im = (np.array((imagen) * (255/4095))).astype(np.uint8)
+    plt.plot(im)
+    plt.show(False)
+    plt.savefig(titulo)
+
+# Creaamos la matriz de la imagen con 12 bpp
+imagen_pixeles, bpp = imagen_bits(imagen, 12)
+
+# Visualizamos la imagen
+plt.imshow(imagen_pixeles, cmap = 'gray') # cmap = "gray", camp = "jet", cmap = "viridis"
+plt.axis('off')
+plt.title("Imagen original")
+plt.show()
