@@ -1,0 +1,37 @@
+# Negative image
+def negativo(imagen):
+    neg = ((2**bpp)-1) - imagen
+    _, ax = plt.subplots()
+    ax.imshow(neg, cmap = "gray")
+    ax.axis("off")
+    ax.set_title("Negativo")
+
+# Gamma correction
+def gamma_1(imagen, nivel):
+    _, ax = plt.subplots()
+    ax.imshow(((imagen/((2**bpp)-1))**nivel)*((2**bpp)-1), cmap = "gray")
+    ax.axis("off")
+    ax.set_title(f"Gamma = {nivel}")
+# Gamma with LUT
+def gamma_2(imagen, nivel):
+    potencias = (np.arange((2**bpp)-1)/((2**bpp)-1))**nivel
+    def buscar(valor):
+        return potencias[valor]
+    func = np.vectorize(buscar)
+    _, ax = plt.subplots()
+    ax.imshow(func(imagen), cmap = "gray")
+    ax.axis("off")
+    ax.set_title(f"Gamma = {nivel}")
+
+# Sqrt correction
+def ajuste_sqrt(imagen):
+    _, ax = plt.subplots()
+    ax.imshow(np.sqrt(imagen), cmap = "gray")
+    ax.axis("off")
+    ax.set_title("Sqrt")
+
+# Percentile correction
+def percentil(imagen, down_perce = 5, up_percen = 95):
+    down, up = np.percentile(imagen, [down_perce, up_percen])
+    ventana(imagen, vmin= down, vmax=up)
+    plt.title("Percentiles")
