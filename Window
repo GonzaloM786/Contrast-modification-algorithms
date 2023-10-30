@@ -1,0 +1,15 @@
+# Para el tejido cerebral los valores optimos son 950 / 1150 (bpp = 12)
+# Para el tejido cerebral los valores optimos son 57 / 75 (bpp = 8)
+# Para la ventana osea los valores optimos son 1100 / 4000 (bpp = 12)
+
+def ventana(imagen, vmin, vmax, titulo):
+    # Valores por debajo del min puestos a 0
+    # Valores por encima del max puestos puestos al valor max del tipo de datos
+    clipeada = np.clip(imagen, a_min=vmin, a_max=vmax)
+    # Reescalamiento para que la ventana ocupe todos los valores de píxeles
+    clipeada = ((clipeada - vmin)/(vmax - vmin))*((2**bpp)-1)
+    # Visualización
+    _, ax = plt.subplots()
+    ax.imshow(clipeada, cmap = "gray")
+    ax.axis("off")
+    ax.set_title(titulo)
